@@ -1,0 +1,6 @@
+# Ignorar dependencias clonadas de ROS y carpetas de compilación
+ros2_ws/src/dependencias/
+ros2_ws/build/
+ros2_ws/install/
+ros2_ws/log/
+tracktrack

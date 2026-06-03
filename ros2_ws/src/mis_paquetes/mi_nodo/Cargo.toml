@@ -1,0 +1,15 @@
+[package]
+name = "mi_nodo"
+version = "0.0.1"
+authors = ["root <root@todo.todo>"]
+edition = "2021"
+
+[[bin]]
+name = "mi_nodo"
+path = "src/main.rs"
+
+[dependencies]
+rclrs = "0.7"
+std_msgs = "*"
+# El crate que buscará nuestro OpenCV 4.11 compilado en C++
+opencv = "0.93.0"
