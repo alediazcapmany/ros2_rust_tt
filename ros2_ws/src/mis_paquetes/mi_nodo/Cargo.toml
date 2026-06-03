@@ -13,3 +13,4 @@ rclrs = "0.7"
 std_msgs = "*"
 # El crate que buscará nuestro OpenCV 4.11 compilado en C++
 opencv = "0.93.0"
+tracktrack = { path = "/app/tracktrack_rust" }

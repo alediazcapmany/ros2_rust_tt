@@ -8,7 +8,7 @@ services:
     container_name: rust_ros2_dev
     volumes:
       # Sincroniza tus carpetas locales con el contenedor
-      - ./tracktrack:/app/tracktrack
+      - ./tracktrack_rust:/app/tracktrack_rust
       - ./ros2_ws:/app/ros2_ws
       # Permite abrir ventanas de OpenCV/interfaz gráfica en tu pantalla local
       - /tmp/.X11-unix:/tmp/.X11-unix:rw
