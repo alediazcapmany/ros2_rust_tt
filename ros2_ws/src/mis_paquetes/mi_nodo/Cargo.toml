@@ -10,7 +10,6 @@ path = "src/main.rs"
 
 [dependencies]
 rclrs = "0.7"
-std_msgs = "*"
-# El crate que buscará nuestro OpenCV 4.11 compilado en C++
-opencv = "0.93.0"
+opencv = "0.94.4"
 mot = { path = "/app/tracktrack_rust" }
+sensor_msgs = "*"

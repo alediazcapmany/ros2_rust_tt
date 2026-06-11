@@ -1,0 +1,9 @@
+**/target/
+**/__pycache__/
+ros2_ws/build/
+ros2_ws/install/
+ros2_ws/log/
+tracktrack_rust/build/
+tracktrack_rust/install/
+tracktrack_rust/log/
+tracktrack_rust/target/

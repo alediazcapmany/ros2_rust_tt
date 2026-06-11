@@ -1,5 +1,4 @@
 version: '3.8'
-
 services:
   dev_env:
     build:
@@ -7,15 +6,21 @@ services:
       dockerfile: Dockerfile
     container_name: rust_ros2_dev
     volumes:
-      # Sincroniza tus carpetas locales con el contenedor
       - ./tracktrack_rust:/app/tracktrack_rust
       - ./ros2_ws:/app/ros2_ws
-      # Permite abrir ventanas de OpenCV/interfaz gráfica en tu pantalla local
       - /tmp/.X11-unix:/tmp/.X11-unix:rw
     environment:
       - DISPLAY=${DISPLAY}
       - QT_X11_NO_MITSHM=1
-    network_mode: "host" # Necesario para que ROS 2 se comunique sin problemas de red
-    ipc: "host"          # Optimiza la comunicación de memoria compartida en ROS 2
-    stdin_open: true     # Mantiene el contenedor abierto en segundo plano
-    tty: true            # Nos permite interactuar con la terminal
+      - PKG_CONFIG_PATH=/usr/local/lib/pkgconfig:/usr/lib/x86_64-linux-gnu/pkgconfig
+      - LD_LIBRARY_PATH=/usr/local/lib:/opt/ros/humble/lib
+    network_mode: "host"
+    ipc: "host"
+    stdin_open: true
+    tty: true
+
+  dev_env_realsense:
+    extends: dev_env
+    privileged: true
+    devices:
+      - /dev/bus/usb:/dev/bus/usb
