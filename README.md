@@ -1,18 +1,12 @@
-Aquí tienes el `README.md` definitivo, completamente estructurado y actualizado con todas las soluciones que hemos integrado hoy (las nuevas dependencias de Boost/Python, el visor nativo integrado en la imagen y la ubicación real del modelo YOLO).
-
----
-
 # ROS 2 Humble · Rust · OpenCV 4.11 · YOLOv8 · TrackTrack
 
 Entorno dockerizado para ejecutar un nodo de ROS 2 escrito en Rust que recibe imágenes de una cámara RealSense D435, detecta personas/objetos con YOLOv8 (ONNX) y los trackea en tiempo real con el algoritmo TrackTrack.
 
 Todo corre dentro de Docker para no contaminar el sistema local con las dependencias de ROS 2, OpenCV 4.11 y el toolchain de Rust.
 
----
-
 ## Arquitectura del pipeline
 
-```
+```text
 RealSense D435 (o fake_camera.py)
         │
         │  /camera/camera/color/image_raw  (sensor_msgs/Image)
@@ -33,7 +27,7 @@ RealSense D435 (o fake_camera.py)
 
 ## Estructura del repositorio
 
-```
+```text
 ros2_rust_tt/
 ├── Dockerfile               # Ubuntu 22 + ROS 2 + OpenCV 4.11 + Rust + Boost/Python + Visor
 ├── docker-compose.yml       # Monta ros2_ws y tracktrack_rust, configura red, USB y X11
@@ -67,17 +61,17 @@ ros2_rust_tt/
 ### 1. Clonar este repositorio
 
 ```bash
-git clone https://github.com/alediazcapmany/ros2_rust_tt.git
+git clone [https://github.com/alediazcapmany/ros2_rust_tt.git](https://github.com/alediazcapmany/ros2_rust_tt.git)
 cd ros2_rust_tt
 
 ```
 
 ### 2. Clonar la librería de tracking
 
-El archivo `docker-compose.yml` espera la carpeta `tracktrack_rust` compartida en la raíz del proyecto:
+El archivo `docker-compose.yml` espera la carpeta `tracktrack_rust` compartida en la raíz del proyecto. Descárgala ahí mismo ejecutando:
 
 ```bash
-git clone https://github.com/alediazcapmany/tracktrack_rust.git
+git clone [https://github.com/alediazcapmany/tracktrack_rust.git](https://github.com/alediazcapmany/tracktrack_rust.git)
 
 ```
 
@@ -103,19 +97,21 @@ cd /app/ros2_ws
 rm -rf build/ install/ log/  # Limpieza de cachés previas si existen
 colcon build
 source install/setup.bash
+
 ```
 
-
+---
 
 ## Ejecución con Hardware Real (RealSense D435)
 
 ### Paso Previo — Permisos Gráficos
+
 Antes de levantar nada, dale permisos a Docker para que pueda abrir ventanas en tu escritorio. Ejecuta esto en una terminal de **tu ordenador (fuera de Docker)**:
+
 ```bash
 xhost +local:root
-```
 
----
+```
 
 ### Terminal 1 — Driver de la Cámara Intel
 
@@ -131,9 +127,8 @@ ros2 launch realsense2_camera rs_launch.py enable_gyro:=true enable_accel:=true
 
 # Opción B: Forzar 60 FPS (Recomendado para seguimiento rápido)
 ros2 launch realsense2_camera rs_launch.py depth_module.depth_profile:=848x480x60 rgb_camera.color_profile:=848x480x60 enable_gyro:=true enable_accel:=true
-```
 
----
+```
 
 ### Terminal 2 — Nodo de Tracking (Rust)
 
@@ -145,9 +140,8 @@ source /opt/ros/humble/setup.bash
 cd /app/ros2_ws && source install/setup.bash
 
 ros2 run mi_nodo mi_nodo
-```
 
----
+```
 
 ### Terminal 3 — Visualización Gráfica en Directo
 
@@ -158,11 +152,10 @@ docker compose exec dev_env_realsense bash
 source /opt/ros/humble/setup.bash
 
 LD_LIBRARY_PATH=/opt/ros/humble/lib ros2 run image_view image_view --ros-args -r image:=/vision/tracking_result
+
 ```
 
-
-
-
+---
 
 ## Configuración del Modelo YOLOv8
 
@@ -172,7 +165,10 @@ Para que el nodo lo localice al arrancar sin necesidad de modificar rutas intern
 
 ```bash
 ln -s /app/tracktrack_rust/yolov8n.onnx /app/yolov8n.onnx
+
 ```
+
+---
 
 ## Tabla de Versiones Clave
 
@@ -190,5 +186,7 @@ ln -s /app/tracktrack_rust/yolov8n.onnx /app/yolov8n.onnx
 ## Solución de Problemas Frecuentes
 
 * **`Can't read ONNX file` / Fallo `StsBadArg`:** El código de Rust no encuentra el archivo del modelo en la raíz de `/app/`. Asegúrate de haber ejecutado correctamente el paso del enlace simbólico (`ln -s`).
-* **`Authorization required` / Fallo de GTK al visualizar:** El contenedor no tiene permiso para renderizar ventanas en tu escritorio local de Ubuntu. Recuerda abrir una terminal en tu sistema host físico y ejecutar `xhost +local:docker`.
+* **`Authorization required` / Fallo de GTK al visualizar:** El contenedor no tiene permiso para renderizar ventanas en tu escritorio local de Ubuntu. Recuerda abrir una terminal en tu sistema host físico y ejecutar `xhost +local:docker` o `xhost +local:root`.
 * **`Could NOT find Boost (missing: python3)`:** Resuelto de forma permanente en esta imagen de Docker utilizando el paquete completo `libboost-all-dev` junto a las cabeceras nativas de desarrollo `python3-dev` y las librerías matriciales de `python3-numpy` en el proceso de construcción.
+
+```
